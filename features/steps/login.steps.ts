@@ -23,15 +23,22 @@ Given('user launches application', { timeout: 30000 }, async function () {
 });
 
 When('user enters login details', async function () {
-console.log("USER:", process.env.USER);
-console.log("PASS:", process.env.PASS);
+  console.log("USER:", process.env.USER);
+  console.log("PASS:", process.env.PASS);
 
-const username = decrypt(process.env.USER as string);
-const password = decrypt(process.env.PASS as string);
+  // Temporarily log decrypted values to confirm decryption works
+  try {
+    const username = decrypt(process.env.USER as string);
+    const password = decrypt(process.env.PASS as string);
+    console.log("Decrypted USER:", username);
+    console.log("Decrypted PASS:", password ? "***resolved***" : "EMPTY");
+    await login.login(username, password, this);
+  } catch (e) {
+    throw new Error(`Decryption failed: ${e}`);
+  }
 
-  await login.login(username, password, this);
-await this.page.waitForLoadState('networkidle');
-await this.page.waitForTimeout(500);
+  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForTimeout(500);
 });
 
 // Then('user should see dashboard', async function () {
