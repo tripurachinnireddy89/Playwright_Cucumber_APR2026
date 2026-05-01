@@ -41,23 +41,24 @@ await this.page.waitForTimeout(500);
 
 Then('user should see dashboard', { timeout: 30000 }, async function () {
 
-  // ✅ wait for navigation to complete properly
-  await this.page.waitForURL('**/dashboard/index', { timeout: 20000 });
-
-  // ✅ ensure DOM is ready
+  // wait for either success or failure
   await this.page.waitForLoadState('domcontentloaded');
 
-  // ✅ better locator (more reliable)
-  const dashboard = this.page.locator("//h6[normalize-space()='Dashboard']").first();
+  const dashboard = this.page.locator("h6:has-text('Dashboard')");
+  const loginError = this.page.locator('.oxd-alert-content-text');
 
-  // ✅ wait for visibility
-  await dashboard.waitFor({ state: 'visible', timeout: 15000 });
-
-  // ✅ highlight (safe)
-  await dashboard.evaluate((el: any) => {
-    el.style.border = '3px solid red';
-  });
+  if (await dashboard.isVisible().catch(() => false)) {
+    // success ✔
+    await dashboard.evaluate((el: any) => {
+      el.style.border = '3px solid red';
+    });
+  } else if (await loginError.isVisible().catch(() => false)) {
+    throw new Error("Login failed in CI - credentials not accepted");
+  } else {
+    throw new Error("Dashboard not found and no error message visible");
+  }
 
 });
+
 
 

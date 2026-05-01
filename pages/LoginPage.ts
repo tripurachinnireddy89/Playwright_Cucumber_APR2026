@@ -13,6 +13,7 @@ export default class LoginPage extends BasePage {
     await world.attach(screenshot, 'image/png');
 
     await this.click(selectors.loginBtn);
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   async isDashboardVisible() {
