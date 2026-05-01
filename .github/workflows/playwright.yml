@@ -31,7 +31,6 @@ jobs:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
         URL: ${{ secrets.URL }}
-        HEADLESS: ${{ secrets.HEADLESS }}
 
     - name: Upload Report
       uses: actions/upload-artifact@v4
