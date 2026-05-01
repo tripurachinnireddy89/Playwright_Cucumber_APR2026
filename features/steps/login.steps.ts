@@ -7,9 +7,19 @@ import { decrypt } from '../../utils/crypto';
 
 let login: LoginPage;
 
-Given('user launches application', async function () {
+
+Given('user launches application', { timeout: 30000 }, async function () {
   login = new LoginPage(this.page);
-  await login.launch('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+
+  await this.page.goto(process.env.URL as string, {
+    waitUntil: 'load',
+    timeout: 30000
+  });
+
+  // ✅ wait for login page element instead
+  await this.page.waitForSelector('input[name="username"]', {
+    timeout: 15000
+  });
 });
 
 When('user enters login details', async function () {
