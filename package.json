@@ -1,0 +1,22 @@
+{
+  "name": "playwright_new_may",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {"test": "cucumber-js"},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^12.8.2",
+    "dotenv": "^17.4.2",
+    "playwright": "^1.59.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}
