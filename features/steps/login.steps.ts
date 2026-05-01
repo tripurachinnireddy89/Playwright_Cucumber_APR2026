@@ -40,13 +40,24 @@ await this.page.waitForTimeout(500);
 
 
 Then('user should see dashboard', { timeout: 30000 }, async function () {
-  await this.page.waitForLoadState('load');
-  const dashboard = this.page.locator("h6:has-text('Dashboard')");
-  await dashboard.waitFor({ timeout: 15000 });
 
-  // highlight (optional)
-  await dashboard.evaluate((el: { style: { border: string; }; }) => {
+  // ✅ wait for navigation to complete properly
+  await this.page.waitForURL('**/dashboard/index', { timeout: 20000 });
+
+  // ✅ ensure DOM is ready
+  await this.page.waitForLoadState('domcontentloaded');
+
+  // ✅ better locator (more reliable)
+  const dashboard = this.page.locator("//h6[normalize-space()='Dashboard']").first();
+
+  // ✅ wait for visibility
+  await dashboard.waitFor({ state: 'visible', timeout: 15000 });
+
+  // ✅ highlight (safe)
+  await dashboard.evaluate((el: any) => {
     el.style.border = '3px solid red';
   });
+
 });
+
 
