@@ -30,6 +30,7 @@ jobs:
       env:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
+        URL: ${{ secrets.URL }}
 
     - name: Upload Report
       uses: actions/upload-artifact@v4
