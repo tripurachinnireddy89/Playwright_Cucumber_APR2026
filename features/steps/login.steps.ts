@@ -41,24 +41,33 @@ await this.page.waitForTimeout(500);
 
 Then('user should see dashboard', { timeout: 30000 }, async function () {
 
-  // wait for either success or failure
-  await this.page.waitForLoadState('domcontentloaded');
+  // Wait for navigation to complete after login form submission
+  await this.page.waitForLoadState('networkidle', { timeout: 20000 });
 
   const dashboard = this.page.locator("h6:has-text('Dashboard')");
   const loginError = this.page.locator('.oxd-alert-content-text');
 
+  // Explicitly wait for one of the two outcomes to appear in the DOM
+  await this.page.waitForSelector(
+    "h6:has-text('Dashboard'), .oxd-alert-content-text",
+    { timeout: 20000 }
+  ).catch(() => {
+    // Will be caught below if neither appears
+  });
+
   if (await dashboard.isVisible().catch(() => false)) {
-    // success ✔
     await dashboard.evaluate((el: any) => {
       el.style.border = '3px solid red';
     });
   } else if (await loginError.isVisible().catch(() => false)) {
     throw new Error("Login failed in CI - credentials not accepted");
   } else {
-    throw new Error("Dashboard not found and no error message visible");
+    // Debug: capture the current URL and page title to understand where we are
+    const url = this.page.url();
+    const title = await this.page.title();
+    throw new Error(
+      `Dashboard not found and no error message visible.\nCurrent URL: ${url}\nPage title: ${title}`
+    );
   }
 
 });
-
-
-
