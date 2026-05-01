@@ -34,6 +34,19 @@ await this.page.waitForLoadState('networkidle');
 await this.page.waitForTimeout(500);
 });
 
-Then('user should see dashboard', async function () {
-  await login.isDashboardVisible();
+// Then('user should see dashboard', async function () {
+//   await login.isDashboardVisible();
+// });
+
+
+Then('user should see dashboard', { timeout: 30000 }, async function () {
+  await this.page.waitForLoadState('load');
+  const dashboard = this.page.locator("h6:has-text('Dashboard')");
+  await dashboard.waitFor({ timeout: 15000 });
+
+  // highlight (optional)
+  await dashboard.evaluate((el: { style: { border: string; }; }) => {
+    el.style.border = '3px solid red';
+  });
 });
+
