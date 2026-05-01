@@ -16,6 +16,7 @@ export default class LoginPage extends BasePage {
   }
 
   async isDashboardVisible() {
-   await this.highlight(selectors.dashboard);
+    await this.page.waitForSelector(selectors.dashboard, { timeout: 15000 });
+    await this.highlight(selectors.dashboard);
   }
 }
