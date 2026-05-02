@@ -39,4 +39,3 @@ jobs:
       with:
         name: cucumber-report
         path: reports/
-          reports/videos/
