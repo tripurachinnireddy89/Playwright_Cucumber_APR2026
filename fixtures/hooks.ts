@@ -1,16 +1,25 @@
 import { Before, AfterStep, After } from '@cucumber/cucumber';
 import { chromium } from 'playwright';
 
-Before(async function () {
- 
-const isCI = process.env.CI === 'true';
-this.browser = await chromium.launch({
-headless: isCI ? true : false
-});
 
-  this.context = await this.browser.newContext();
+
+Before(async function () {
+
+  const headless = process.env.HEADLESS === 'true' || process.env.CI === 'true';
+
+  this.browser = await chromium.launch({ headless });
+
+  this.context = await this.browser.newContext({
+    recordVideo: {
+      dir: 'reports/videos/',   // 👈 videos folder
+      size: { width: 1280, height: 720 }
+    }
+  });
+
   this.page = await this.context.newPage();
 });
+
+
 
 AfterStep(async function ({ pickleStep }) {
 
@@ -26,7 +35,25 @@ AfterStep(async function ({ pickleStep }) {
 });
 
 After(async function () {
-  // wait before closing (important)
-  await this.page.waitForTimeout(1000);
-  await this.browser.close();
+
+  let videoPath;
+
+  if (this.page) {
+    videoPath = await this.page.video()?.path();
+  }
+
+  if (this.context) {
+    await this.context.close(); // 👈 saves video
+  }
+
+  if (videoPath) {
+    const fs = require('fs');
+    const videoBuffer = fs.readFileSync(videoPath);
+    await this.attach(videoBuffer, 'video/webm');
+  }
+
+  if (this.browser) {
+    await this.browser.close();
+  }
+
 });
