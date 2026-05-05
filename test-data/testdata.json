@@ -1,3 +1,6 @@
 {
-
+  "AddEmployee": {
+    "firstName": "BalaTest",
+    "lastName": "Chinni"
+  }
 }
