@@ -75,6 +75,11 @@ jobs:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
         URL: ${{ secrets.URL }}
+    - name: Upload Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: cucumber-report
+        path: reports/
 
   regression-tests:
     name: 🔁 Regression Tests
@@ -97,6 +102,12 @@ jobs:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
         URL: ${{ secrets.URL }}
+
+    - name: Upload Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: cucumber-report
+        path: reports/
 
   acceptance-tests:
     name: ✅ Acceptance Tests (Release Validation)
