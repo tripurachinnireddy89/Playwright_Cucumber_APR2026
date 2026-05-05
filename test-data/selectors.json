@@ -1,6 +1,15 @@
 {
-  "username": "input[name='username']",
-  "password": "input[name='password']",
-  "loginBtn": "button[type='submit']",
- "dashboard": "h6:has-text('Dashboard')"
+  "Login": {
+    "username": "input[name='username']",
+    "password": "input[name='password']",
+    "loginBtn": "button[type='submit']",
+    "dashboard": "h6:has-text('Dashboard')"
+  },
+  "PIM": {
+    "pimMenu": "a:has-text('PIM')",
+    "addEmployee": "a:has-text('Add Employee')",
+    "firstName": "input[name='firstName']",
+    "lastName": "input[name='lastName']",
+    "saveBtn": "button[type='submit']"
+  }
 }

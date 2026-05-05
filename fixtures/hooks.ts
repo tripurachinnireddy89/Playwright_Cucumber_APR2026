@@ -6,7 +6,6 @@ import { chromium } from 'playwright';
 Before(async function () {
 
   const headless = process.env.HEADLESS === 'true' || process.env.CI === 'true';
-
   this.browser = await chromium.launch({ headless });
 
   this.context = await this.browser.newContext({
@@ -26,7 +25,7 @@ AfterStep(async function ({ pickleStep }) {
   const stepName = pickleStep.text;
 
   // ❌ Skip screenshot for login step
-  if (stepName.includes('login details')) return;
+  if (stepName.includes('valid credentials')) return;
 
   await this.page.waitForLoadState('networkidle');
 

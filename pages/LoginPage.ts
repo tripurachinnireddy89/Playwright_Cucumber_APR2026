@@ -3,21 +3,25 @@ import selectors from '../test-data/selectors.json';
 
 export default class LoginPage extends BasePage {
 
-
   async login(username: string, password: string, world: any) {
-    await this.fill(selectors.username, username);
-    await this.fill(selectors.password, password);
 
-    // 📸 Attach screenshot BEFORE clicking login
+    await this.fill(selectors.Login.username, username);
+    await this.fill(selectors.Login.password, password);
+
     const screenshot = await this.page.screenshot({ fullPage: true });
     await world.attach(screenshot, 'image/png');
 
-    await this.click(selectors.loginBtn);
-    await this.page.waitForLoadState('domcontentloaded');
+    // ✅ FIX: Proper navigation handling
+    await Promise.all([
+      this.page.waitForSelector(selectors.Login.dashboard, { timeout: 20000 }),
+      this.click(selectors.Login.loginBtn)
+    ]);
   }
 
   async isDashboardVisible() {
-    await this.page.waitForSelector(selectors.dashboard, { timeout: 25000 });
-    await this.highlight(selectors.dashboard);
+    await this.page.waitForSelector(selectors.Login.dashboard, {
+      state: 'visible',
+      timeout: 20000
+    });
   }
 }
