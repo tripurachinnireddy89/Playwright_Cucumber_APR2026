@@ -7,8 +7,20 @@
   "smoke": "cucumber-js --tags @smoke",
   "regression": "cucumber-js --tags @regression",
   "acceptance": "cucumber-js --tags @acceptance",
+
+  "smoke:qa:chrome": "cross-env ENV=qa BROWSER=chromium npm run smoke",
+  "smoke:qa:firefox": "cross-env ENV=qa BROWSER=firefox npm run smoke",
+  "smoke:qa:webkit": "cross-env ENV=qa BROWSER=webkit npm run smoke",
+
+  "reg:uat:chrome": "cross-env ENV=uat BROWSER=chromium npm run regression",
+  "reg:uat:firefox": "cross-env ENV=uat BROWSER=firefox npm run regression",
+  "acc:uat:chrome": "cross-env ENV=uat BROWSER=chromium npm run acceptance",
+
+  "acc:prod:chrome": "cross-env ENV=prod BROWSER=chromium npm run acceptance",
+  "acc:prod:firefox": "cross-env ENV=prod BROWSER=firefox npm run acceptance",
+
   "test": "cucumber-js"
-},
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,6 +31,7 @@
   },
   "dependencies": {
     "@cucumber/cucumber": "^12.8.2",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "playwright": "^1.59.1",
     "ts-node": "^10.9.2",

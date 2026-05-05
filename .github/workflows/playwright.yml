@@ -70,7 +70,7 @@ jobs:
     - run: npx playwright install --with-deps
 
     - name: Run Smoke Tests
-      run: npm run smoke
+      run: npm run smoke:qa:chrome
       env:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
@@ -92,7 +92,7 @@ jobs:
     - run: npx playwright install --with-deps
 
     - name: Run Regression Tests
-      run: npm run regression
+      run: npm run reg:uat:chrome
       env:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
@@ -114,7 +114,7 @@ jobs:
     - run: npx playwright install --with-deps
 
     - name: Run Acceptance Tests
-      run: npm run acceptance
+      run: npm run acc:uat:chrome
       env:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
