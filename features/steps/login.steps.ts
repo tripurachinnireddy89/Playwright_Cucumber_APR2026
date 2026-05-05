@@ -25,6 +25,8 @@ When('user logs in with valid credentials', { timeout: 30000 }, async function (
 
   const username = decrypt(process.env.USER!);
   const password = decrypt(process.env.PASS!);
+  const env = process.env.ENV || 'qa';
+  console.log("Running in ENV:", env);
 
   await login.login(username, password, this);
 });

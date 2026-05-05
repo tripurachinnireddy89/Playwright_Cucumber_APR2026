@@ -4,9 +4,11 @@ Feature: Login & Employee Management
     Given user launches application
     And user logs in with valid credentials
 
+@smoke
   Scenario: Valid Login
     Then user should see dashboard
 
+@regression @acceptance
   Scenario: Add new employee
     Given user is on dashboard
     When user clicks on PIM module

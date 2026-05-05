@@ -1,5 +1,6 @@
 import { Given, Then, When } from "@cucumber/cucumber";
 import AddEmployeePage from "../../pages/AddEmployeePage";
+import testData from "../../test-data/testdata.json";
 
 let addEmp: AddEmployeePage;
 
@@ -16,7 +17,7 @@ When('user clicks on add employee button', async function () {
 });
 
 When('user enters employee details', async function () {
-  await addEmp.addEmployeeDetails("bala", "tripura");
+  await addEmp.addEmployeeDetails(testData.AddEmployee.firstName, testData.AddEmployee.lastName);
 });
 
 When('user clicks on save button', async function () {

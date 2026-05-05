@@ -1,4 +1,49 @@
-name: Playwright Cucumber Tests
+# name: Playwright Cucumber Tests
+
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+#   schedule:
+#     - cron: '*/6 * * * 1-5'
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
+
+#     - name: Setup Node.js
+#       uses: actions/setup-node@v4
+#       with:
+#         node-version: 20
+
+#     - name: Install dependencies
+#       run: npm install
+
+#     - name: Install Playwright Browsers
+#       run: npx playwright install --with-deps
+
+#     - name: Run Tests
+#       run: npm test
+#       env:
+#         USER: ${{ secrets.USER }}
+#         PASS: ${{ secrets.PASS }}
+#         URL: ${{ secrets.URL }}
+
+#     - name: Upload Report
+#       uses: actions/upload-artifact@v4
+#       with:
+#         name: cucumber-report
+#         path: reports/
+
+
+
+
+name: Playwright Cucumber CI/CD
 
 on:
   push:
@@ -6,35 +51,76 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '*/6 * * * 1-5'
+    - cron: '0 6 * * 1-5'   # daily morning run
 
 jobs:
-  test:
+
+  smoke-tests:
+    name: 🔥 Smoke Tests (BVT)
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 20
 
-    - name: Install dependencies
-      run: npm install
+    - run: npm install
+    - run: npx playwright install --with-deps
 
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-
-    - name: Run Tests
-      run: npm test
+    - name: Run Smoke Tests
+      run: npm run smoke
       env:
         USER: ${{ secrets.USER }}
         PASS: ${{ secrets.PASS }}
         URL: ${{ secrets.URL }}
 
-    - name: Upload Report
+  regression-tests:
+    name: 🔁 Regression Tests
+    needs: smoke-tests   # runs only if smoke passes
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - run: npm install
+    - run: npx playwright install --with-deps
+
+    - name: Run Regression Tests
+      run: npm run regression
+      env:
+        USER: ${{ secrets.USER }}
+        PASS: ${{ secrets.PASS }}
+        URL: ${{ secrets.URL }}
+
+  acceptance-tests:
+    name: ✅ Acceptance Tests (Release Validation)
+    needs: regression-tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - run: npm install
+    - run: npx playwright install --with-deps
+
+    - name: Run Acceptance Tests
+      run: npm run acceptance
+      env:
+        USER: ${{ secrets.USER }}
+        PASS: ${{ secrets.PASS }}
+        URL: ${{ secrets.URL }}
+
+    - name: Upload Reports
       uses: actions/upload-artifact@v4
       with:
         name: cucumber-report
